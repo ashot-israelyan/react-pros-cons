@@ -1,14 +1,13 @@
 import React from 'react';
-import ProsComponent from '../components/ProsComponent';
-import ConsComponent from '../components/ConsComponent';
+import CardsComponent from '../components/CardsComponent';
 
 const MainPage = () => (
-    <div>
+    <div className="app">
         <header>Shoud I eat at McDonalds ?</header>
         <main className="container">
-            <ProsComponent />
+            <CardsComponent type="pros"/>
             <span className="line"></span>
-            <ConsComponent />
+            <CardsComponent type="cons"/>
         </main>
     </div>
 );

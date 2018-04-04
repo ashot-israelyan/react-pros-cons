@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    height: 700px;
+    flex-direction: row;
+    width: 600px;
+
+    .pros-container {
+        width: 50%;
+    }
+
+    .cons-container {
+        width: 50%;
+    }
+
+    .line {
+        width: 1px;
+        height: 100vh;
+        color: black;
+        background-color: black;
+    }
+
+    .card {
+        padding: 0.5rem 1rem;
+        cursor: move;
+    }
+}

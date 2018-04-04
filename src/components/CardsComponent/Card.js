@@ -4,14 +4,6 @@ import { findDOMNode } from 'react-dom'
 import { DragSource, DropTarget } from 'react-dnd'
 import ItemTypes from './ItemTypes'
 
-const style = {
-	border: '1px dashed gray',
-	padding: '0.5rem 1rem',
-	marginBottom: '.5rem',
-	backgroundColor: 'white',
-	cursor: 'move',
-}
-
 const cardSource = {
 	beginDrag(props) {
 		return {
@@ -57,17 +49,51 @@ const cardTarget = {
 	isDragging: monitor.isDragging(),
 }))
 export default class Card extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			text: this.props.text,
+			cardAdded: false,
+			cardDelete: false
+		}
+	}
+
 	static propTypes = {
 		index: PropTypes.number.isRequired,
 		id: PropTypes.any.isRequired,
 		text: PropTypes.string.isRequired,
 		moveCard: PropTypes.func.isRequired,
+		hadleInputSubmit: PropTypes.func.isRequired,
+		addEmptyCard: PropTypes.func.isRequired,
+		removeCard: PropTypes.func.isRequired
+	}
+
+	onChangeHandler = (event) => {
+		if (event.target.value.length === 1 && !this.state.cardAdded) {
+			this.props.addEmptyCard();
+			this.setState({ cardAdded: true });
+		}
+
+		if (!event.target.value.length) {
+			this.props.removeCard(this.props.id);
+			this.setState({ cardDelete: true });
+
+			return false;
+		}
+
+		this.setState({ text: event.target.value });
+	}
+
+	handleBlur = () => {
+		if (!this.state.cardDelete) {
+			this.props.hadleInputSubmit(this.state.text, this.props.id);
+		}
 	}
 
 	render() {
 		const {
-            index,
-			text,
+			index,
 			isDragging,
 			connectDragSource,
 			connectDropTarget,
@@ -75,7 +101,16 @@ export default class Card extends Component {
 		const opacity = isDragging ? 0 : 1
 
 		return connectDragSource(
-			connectDropTarget(<div style={{ ...style, opacity }}>{index + 1} {text}</div>),
+			connectDropTarget(
+				<div className="card" style={{ opacity }}>
+					<strong>{index + 1}.</strong>
+					<input
+						type="text"
+						defaultValue={this.state.text}
+						onChange={this.onChangeHandler}
+						onBlur={this.handleBlur} />
+				</div>
+			),
 		)
 	}
 }

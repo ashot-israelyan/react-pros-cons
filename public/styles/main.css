@@ -300,5 +300,43 @@ template {
  */
 [hidden] {
   display: none; }
+.app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 30px; }
+
+header {
+  background: gray;
+  width: 100%;
+  max-width: 600px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold; }
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  height: 700px;
+  flex-direction: row;
+  width: 600px; }
+  .container .pros-container {
+    width: 50%; }
+  .container .cons-container {
+    width: 50%; }
+  .container .line {
+    width: 1px;
+    height: 100vh;
+    color: black;
+    background-color: black; }
+  .container .card {
+    padding: 0.5rem 1rem;
+    cursor: move; }
 
 /*# sourceMappingURL=main.css.map*/
