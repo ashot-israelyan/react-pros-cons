@@ -329,7 +329,10 @@ header {
   height: 100vh;
   flex-direction: row;
   width: 600px;
-  overflow-x: scroll; }
+  overflow-x: scroll;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+  box-sizing: border-box; }
   .container .pros-container {
     width: 50%; }
   .container .cons-container {
@@ -352,5 +355,7 @@ header {
     cursor: move; }
     .container .card strong {
       margin-right: 10px; }
+    .container .card input {
+      border: none; }
 
 /*# sourceMappingURL=main.css.map*/
