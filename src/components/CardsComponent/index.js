@@ -12,16 +12,6 @@ import * as actionTypes from '../../redux/actions/actionTypes';
 
 @DragDropContext(HTML5Backend)
 class Container extends Component {
-	state = {
-		cards: this.props.cards
-	}
-
-	static getDerivedStateFromProps(nextProps) {
-		console.log(nextProps);
-
-		return nextProps.cards;
-	}
-
 	moveCard = (dragIndex, hoverIndex) => {
 		const { cards } = { ...this.props };
 		const dragCard = cards[dragIndex];
@@ -61,7 +51,7 @@ class Container extends Component {
 				{this.props.type.toUpperCase()}
 
 				<div className="cards-container">
-					{this.props.cards.map((card, i) => (
+					{(this.props.cards || []).map((card, i) => (
 						<Card
 							key={card.id}
 							index={i}

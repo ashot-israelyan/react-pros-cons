@@ -9355,9 +9355,7 @@ var Container = (_dec = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.de
 			args[_key] = arguments[_key];
 		}
 
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Container.__proto__ || Object.getPrototypeOf(Container)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-			cards: _this.props.cards
-		}, _this.moveCard = function (dragIndex, hoverIndex) {
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Container.__proto__ || Object.getPrototypeOf(Container)).call.apply(_ref, [this].concat(args))), _this), _this.moveCard = function (dragIndex, hoverIndex) {
 			var _this$props = _extends({}, _this.props),
 			    cards = _this$props.cards;
 
@@ -9401,7 +9399,7 @@ var Container = (_dec = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.de
 				_react2.default.createElement(
 					'div',
 					{ className: 'cards-container' },
-					this.props.cards.map(function (card, i) {
+					(this.props.cards || []).map(function (card, i) {
 						return _react2.default.createElement(_Card2.default, {
 							key: card.id,
 							index: i,
@@ -9415,13 +9413,6 @@ var Container = (_dec = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.de
 					})
 				)
 			);
-		}
-	}], [{
-		key: 'getDerivedStateFromProps',
-		value: function getDerivedStateFromProps(nextProps) {
-			console.log(nextProps);
-
-			return nextProps.cards;
 		}
 	}]);
 
@@ -9842,7 +9833,6 @@ function invariantMapOrSet(target, command) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -9921,12 +9911,21 @@ var Card = (_dec = (0, _reactDnd.DropTarget)(_ItemTypes2.default.CARD, cardTarge
 }), _dec(_class = _dec2(_class = function (_Component) {
 	_inherits(Card, _Component);
 
-	function Card(props) {
+	function Card() {
+		var _ref;
+
+		var _temp, _this, _ret;
+
 		_classCallCheck(this, Card);
 
-		var _this = _possibleConstructorReturn(this, (Card.__proto__ || Object.getPrototypeOf(Card)).call(this, props));
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
 
-		_this.onChangeHandler = function (event) {
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Card.__proto__ || Object.getPrototypeOf(Card)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+			text: _this.props.text,
+			cardAdded: !!_this.props.text
+		}, _this.onChangeHandler = function (event) {
 			if (event.target.value.length === 1 && !_this.state.cardAdded) {
 				_this.props.addEmptyCard();
 				_this.setState({ cardAdded: true });
@@ -9934,26 +9933,14 @@ var Card = (_dec = (0, _reactDnd.DropTarget)(_ItemTypes2.default.CARD, cardTarge
 
 			if (!event.target.value.length) {
 				_this.props.removeCard(_this.props.id);
-				_this.setState({ cardDelete: true });
 
 				return false;
 			}
 
 			_this.setState({ text: event.target.value });
-		};
-
-		_this.handleBlur = function () {
-			if (!_this.state.cardDelete) {
-				_this.props.hadleInputSubmit(_this.state.text, _this.props.id);
-			}
-		};
-
-		_this.state = {
-			text: _this.props.text,
-			cardAdded: false,
-			cardDelete: false
-		};
-		return _this;
+		}, _this.handleBlur = function () {
+			_this.props.hadleInputSubmit(_this.state.text, _this.props.id);
+		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
 	_createClass(Card, [{
@@ -9987,6 +9974,8 @@ var Card = (_dec = (0, _reactDnd.DropTarget)(_ItemTypes2.default.CARD, cardTarge
 
 	return Card;
 }(_react.Component)) || _class) || _class);
+
+
 Card.propTypes = {
 	index: _propTypes2.default.number.isRequired,
 	id: _propTypes2.default.any.isRequired,
@@ -9996,6 +9985,7 @@ Card.propTypes = {
 	addEmptyCard: _propTypes2.default.func.isRequired,
 	removeCard: _propTypes2.default.func.isRequired
 };
+
 exports.default = Card;
 
 /***/ }),
@@ -10309,6 +10299,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var initialState = {
@@ -10345,43 +10337,44 @@ exports.default = function () {
         var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
         var action = arguments[1];
 
-        var newState = {};
         var cardIndex = 0;
         switch (action.type) {
             case actionTypes.REORDER_CARDS:
                 return _extends({}, state, _defineProperty({}, action.cardType, action.payload));
 
             case actionTypes.EDIT_CARD:
-                newState = _extends({}, state);
+                var newStateEdits = [].concat(_toConsumableArray(state[action.cardType]));
 
-                cardIndex = newState[action.cardType].findIndex(function (el) {
+                cardIndex = newStateEdits.findIndex(function (el) {
                     return el.id === action.id;
                 });
 
                 if (cardIndex > -1) {
-                    newState[action.cardType][cardIndex].text = action.value;
+                    newStateEdits[cardIndex].text = action.value;
                 }
 
-                return newState;
+                return _extends({}, state, _defineProperty({}, action.cardType, newStateEdits));
             case actionTypes.ADD_CARD:
-                newState = _extends({}, state);
+                var newStateAdds = [].concat(_toConsumableArray(state[action.cardType]));
 
-                newState[action.cardType].push({
+                newStateAdds.push({
                     text: action.value,
                     id: (0, _uniqueId2.default)(action.cardType + '_')
                 });
 
-                return newState;
+                return _extends({}, state, _defineProperty({}, action.cardType, newStateAdds));
             case actionTypes.DELETE_CARD:
-                newState = _extends({}, state);
+                var newStateDeletes = [].concat(_toConsumableArray(state[action.cardType]));
 
-                cardIndex = newState[action.cardType].findIndex(function (el) {
+                cardIndex = newStateDeletes.findIndex(function (el) {
                     return el.id === action.id;
                 });
 
-                newState[action.cardType].splice(cardIndex, 1);
+                if (cardIndex > -1) {
+                    newStateDeletes.splice(cardIndex, 1);
+                }
 
-                return newState;
+                return _extends({}, state, _defineProperty({}, action.cardType, newStateDeletes));
             default:
                 return state;
         }

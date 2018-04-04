@@ -48,26 +48,12 @@ const cardTarget = {
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging(),
 }))
-export default class Card extends Component {
-	constructor(props) {
-		super(props);
 
-		this.state = {
-			text: this.props.text,
-			cardAdded: false,
-			cardDelete: false
-		}
-	}
-
-	static propTypes = {
-		index: PropTypes.number.isRequired,
-		id: PropTypes.any.isRequired,
-		text: PropTypes.string.isRequired,
-		moveCard: PropTypes.func.isRequired,
-		hadleInputSubmit: PropTypes.func.isRequired,
-		addEmptyCard: PropTypes.func.isRequired,
-		removeCard: PropTypes.func.isRequired
-	}
+class Card extends Component {
+	state = {
+		text: this.props.text,
+		cardAdded: !!this.props.text
+	};
 
 	onChangeHandler = (event) => {
 		if (event.target.value.length === 1 && !this.state.cardAdded) {
@@ -77,7 +63,6 @@ export default class Card extends Component {
 
 		if (!event.target.value.length) {
 			this.props.removeCard(this.props.id);
-			this.setState({ cardDelete: true });
 
 			return false;
 		}
@@ -86,9 +71,7 @@ export default class Card extends Component {
 	}
 
 	handleBlur = () => {
-		if (!this.state.cardDelete) {
-			this.props.hadleInputSubmit(this.state.text, this.props.id);
-		}
+		this.props.hadleInputSubmit(this.state.text, this.props.id);
 	}
 
 	render() {
@@ -114,3 +97,15 @@ export default class Card extends Component {
 		)
 	}
 }
+
+Card.propTypes = {
+	index: PropTypes.number.isRequired,
+	id: PropTypes.any.isRequired,
+	text: PropTypes.string.isRequired,
+	moveCard: PropTypes.func.isRequired,
+	hadleInputSubmit: PropTypes.func.isRequired,
+	addEmptyCard: PropTypes.func.isRequired,
+	removeCard: PropTypes.func.isRequired
+}
+
+export default Card;

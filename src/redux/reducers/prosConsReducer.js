@@ -42,7 +42,6 @@ const initialState = {
 
 export default () => {
     return (state = initialState, action) => {
-        let newState = {};
         let cardIndex = 0;
         switch (action.type) {
             case actionTypes.REORDER_CARDS:
@@ -52,32 +51,43 @@ export default () => {
                 };
 
             case actionTypes.EDIT_CARD:
-                newState = {...state};
+                const newStateEdits = [ ...state[action.cardType] ];
 
-                cardIndex = newState[action.cardType].findIndex(el => el.id === action.id);
+                cardIndex = newStateEdits.findIndex(el => el.id === action.id);
 
                 if (cardIndex > -1) {
-                    newState[action.cardType][cardIndex].text = action.value;
+                    newStateEdits[cardIndex].text = action.value;
                 }
 
-                return newState;
+                return {
+                    ...state,
+                    [action.cardType]: newStateEdits
+                }
             case actionTypes.ADD_CARD:
-                newState = {...state};
+                const newStateAdds = [ ...state[action.cardType] ];
 
-                newState[action.cardType].push({
+                newStateAdds.push({
                     text: action.value,
                     id: uniqueId(action.cardType + '_')
                 });
 
-                return newState;
+                return {
+                    ...state,
+                    [action.cardType]: newStateAdds
+                }
             case actionTypes.DELETE_CARD:
-                newState = { ...state };
+                const newStateDeletes = [ ...state[action.cardType] ];
+                
+                cardIndex = newStateDeletes.findIndex(el => el.id === action.id);
 
-                cardIndex = newState[action.cardType].findIndex(el => el.id === action.id);
+                if (cardIndex > -1) {
+                    newStateDeletes.splice(cardIndex, 1);
+                }
 
-                newState[action.cardType].splice(cardIndex, 1);
-
-                return newState;
+                return {
+                    ...state,
+                    [action.cardType]: newStateDeletes
+                }
             default:
                 return state;
         }
