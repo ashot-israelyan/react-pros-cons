@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore, applyMiddleware, compose} from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import AppRouter, { history } from './routers';
 import thunk from 'redux-thunk';
@@ -13,9 +13,10 @@ const composeEnhacers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducers(), composeEnhacers());
 
-ReactDOM.render(
+const jsx = (
     <Provider store={store}>
         <AppRouter />
-    </Provider>,
-    document.getElementById('app')
+    </Provider>
 );
+
+ReactDOM.render(jsx, document.getElementById('app'));

@@ -9119,11 +9119,13 @@ var composeEnhacers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || _redux.comp
 
 var store = (0, _redux.createStore)((0, _reducers2.default)(), composeEnhacers());
 
-_reactDom2.default.render(_react2.default.createElement(
+var jsx = _react2.default.createElement(
     _reactRedux.Provider,
     { store: store },
     _react2.default.createElement(_routers2.default, null)
-), document.getElementById('app'));
+);
+
+_reactDom2.default.render(jsx, document.getElementById('app'));
 
 /***/ }),
 /* 428 */,
@@ -9199,14 +9201,10 @@ var AppRouter = function AppRouter() {
         _reactRouterDom.Router,
         { history: history },
         _react2.default.createElement(
-            'div',
+            _reactRouterDom.Switch,
             null,
-            _react2.default.createElement(
-                _reactRouterDom.Switch,
-                null,
-                _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _MainPage2.default, exact: true }),
-                _react2.default.createElement(_reactRouterDom.Route, { component: _NotFoundPage2.default })
-            )
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _MainPage2.default, exact: true }),
+            _react2.default.createElement(_reactRouterDom.Route, { component: _NotFoundPage2.default })
         )
     );
 };
@@ -9288,12 +9286,11 @@ exports.default = MainPage;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dec, _class;
+var _dec, _dec2, _class;
 
 var _react = __webpack_require__(5);
 
@@ -9341,7 +9338,30 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Container = (_dec = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default), _dec(_class = function (_Component) {
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+	return {
+		cards: state.prosCons[ownProps.type]
+	};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	return {
+		reorderCards: function reorderCards(type, cards) {
+			return dispatch(_actions2.default.prosCons.reorderCards(type, cards));
+		},
+		addCard: function addCard(cardType, value) {
+			return dispatch(_actions2.default.prosCons.addCard(cardType, value));
+		},
+		updateCard: function updateCard(cardType, id, value) {
+			return dispatch(_actions2.default.prosCons.editCard(cardType, id, value));
+		},
+		deleteCard: function deleteCard(cardType, id) {
+			return dispatch(_actions2.default.prosCons.deleteCard(cardType, id));
+		}
+	};
+};
+
+var Container = (_dec = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default), _dec2 = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps), _dec(_class = _dec2(_class = function (_Component) {
 	_inherits(Container, _Component);
 
 	function Container() {
@@ -9356,10 +9376,7 @@ var Container = (_dec = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.de
 		}
 
 		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Container.__proto__ || Object.getPrototypeOf(Container)).call.apply(_ref, [this].concat(args))), _this), _this.moveCard = function (dragIndex, hoverIndex) {
-			var _this$props = _extends({}, _this.props),
-			    cards = _this$props.cards;
-
-			var dragCard = cards[dragIndex];
+			var dragCard = _this.props.cards[dragIndex];
 
 			var newState = (0, _immutabilityHelper2.default)(_this.props, {
 				cards: {
@@ -9395,7 +9412,11 @@ var Container = (_dec = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.de
 			return _react2.default.createElement(
 				'div',
 				{ className: this.props.type + '-container' },
-				this.props.type.toUpperCase(),
+				_react2.default.createElement(
+					'span',
+					{ className: 'name' },
+					this.props.type.toUpperCase()
+				),
 				_react2.default.createElement(
 					'div',
 					{ className: 'cards-container' },
@@ -9417,37 +9438,11 @@ var Container = (_dec = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.de
 	}]);
 
 	return Container;
-}(_react.Component)) || _class);
-
-
-var mapStateToProps = function mapStateToProps(state, ownProps) {
-	return {
-		cards: state.prosCons[ownProps.type]
-	};
-};
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	return {
-		reorderCards: function reorderCards(type, cards) {
-			return dispatch(_actions2.default.prosCons.reorderCards(type, cards));
-		},
-		addCard: function addCard(cardType, value) {
-			return dispatch(_actions2.default.prosCons.addCard(cardType, value));
-		},
-		updateCard: function updateCard(cardType, id, value) {
-			return dispatch(_actions2.default.prosCons.editCard(cardType, id, value));
-		},
-		deleteCard: function deleteCard(cardType, id) {
-			return dispatch(_actions2.default.prosCons.deleteCard(cardType, id));
-		}
-	};
-};
-
+}(_react.Component)) || _class) || _class);
 Container.propTypes = {
 	type: _propTypes2.default.string.isRequired
 };
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Container);
+exports.default = Container;
 
 /***/ }),
 /* 490 */
@@ -9833,6 +9828,7 @@ function invariantMapOrSet(target, command) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -9923,7 +9919,6 @@ var Card = (_dec = (0, _reactDnd.DropTarget)(_ItemTypes2.default.CARD, cardTarge
 		}
 
 		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Card.__proto__ || Object.getPrototypeOf(Card)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-			text: _this.props.text,
 			cardAdded: !!_this.props.text
 		}, _this.onChangeHandler = function (event) {
 			if (event.target.value.length === 1 && !_this.state.cardAdded) {
@@ -9937,9 +9932,7 @@ var Card = (_dec = (0, _reactDnd.DropTarget)(_ItemTypes2.default.CARD, cardTarge
 				return false;
 			}
 
-			_this.setState({ text: event.target.value });
-		}, _this.handleBlur = function () {
-			_this.props.hadleInputSubmit(_this.state.text, _this.props.id);
+			_this.props.hadleInputSubmit(event.target.value, _this.props.id);
 		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
@@ -9954,7 +9947,7 @@ var Card = (_dec = (0, _reactDnd.DropTarget)(_ItemTypes2.default.CARD, cardTarge
 
 			var opacity = isDragging ? 0 : 1;
 
-			return connectDragSource(connectDropTarget(_react2.default.createElement(
+			var jsx = _react2.default.createElement(
 				'div',
 				{ className: 'card', style: { opacity: opacity } },
 				_react2.default.createElement(
@@ -9965,17 +9958,21 @@ var Card = (_dec = (0, _reactDnd.DropTarget)(_ItemTypes2.default.CARD, cardTarge
 				),
 				_react2.default.createElement('input', {
 					type: 'text',
-					defaultValue: this.state.text,
+					defaultValue: this.props.text,
 					onChange: this.onChangeHandler,
 					onBlur: this.handleBlur })
-			)));
+			);
+
+			if (!this.props.text) {
+				return jsx;
+			}
+
+			return connectDragSource(connectDropTarget(jsx));
 		}
 	}]);
 
 	return Card;
 }(_react.Component)) || _class) || _class);
-
-
 Card.propTypes = {
 	index: _propTypes2.default.number.isRequired,
 	id: _propTypes2.default.any.isRequired,
@@ -9985,7 +9982,6 @@ Card.propTypes = {
 	addEmptyCard: _propTypes2.default.func.isRequired,
 	removeCard: _propTypes2.default.func.isRequired
 };
-
 exports.default = Card;
 
 /***/ }),
@@ -10322,12 +10318,6 @@ var initialState = {
         text: 'It\'s dangerous for health'
     }, {
         id: (0, _uniqueId2.default)('cons_'),
-        text: 'It\'s really tasty dfsagdfg'
-    }, {
-        id: (0, _uniqueId2.default)('cons_'),
-        text: 'It\'s really fast hsdhgd'
-    }, {
-        id: (0, _uniqueId2.default)('cons_'),
         text: ''
     }]
 };
@@ -10337,7 +10327,6 @@ exports.default = function () {
         var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
         var action = arguments[1];
 
-        var cardIndex = 0;
         switch (action.type) {
             case actionTypes.REORDER_CARDS:
                 return _extends({}, state, _defineProperty({}, action.cardType, action.payload));
@@ -10345,12 +10334,12 @@ exports.default = function () {
             case actionTypes.EDIT_CARD:
                 var newStateEdits = [].concat(_toConsumableArray(state[action.cardType]));
 
-                cardIndex = newStateEdits.findIndex(function (el) {
+                var cardEditIndex = newStateEdits.findIndex(function (el) {
                     return el.id === action.id;
                 });
 
-                if (cardIndex > -1) {
-                    newStateEdits[cardIndex].text = action.value;
+                if (cardEditIndex > -1) {
+                    newStateEdits[cardEditIndex].text = action.value;
                 }
 
                 return _extends({}, state, _defineProperty({}, action.cardType, newStateEdits));
@@ -10366,12 +10355,12 @@ exports.default = function () {
             case actionTypes.DELETE_CARD:
                 var newStateDeletes = [].concat(_toConsumableArray(state[action.cardType]));
 
-                cardIndex = newStateDeletes.findIndex(function (el) {
+                var cardDeleteIndex = newStateDeletes.findIndex(function (el) {
                     return el.id === action.id;
                 });
 
-                if (cardIndex > -1) {
-                    newStateDeletes.splice(cardIndex, 1);
+                if (cardDeleteIndex > -1) {
+                    newStateDeletes.splice(cardDeleteIndex, 1);
                 }
 
                 return _extends({}, state, _defineProperty({}, action.cardType, newStateDeletes));

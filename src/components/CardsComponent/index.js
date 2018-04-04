@@ -10,11 +10,31 @@ import uniqueId from 'lodash/uniqueId';
 import actions from '../../redux/actions';
 import * as actionTypes from '../../redux/actions/actionTypes';
 
+const mapStateToProps = (state, ownProps) => {
+	return {
+		cards: state.prosCons[ownProps.type]
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		reorderCards: (type, cards) => dispatch(actions.prosCons.reorderCards(type, cards)),
+		addCard: (cardType, value) => dispatch(actions.prosCons.addCard(cardType, value)),
+		updateCard: (cardType, id, value) => dispatch(actions.prosCons.editCard(cardType, id, value)),
+		deleteCard: (cardType, id) => dispatch(actions.prosCons.deleteCard(cardType, id))
+	}
+}
+
 @DragDropContext(HTML5Backend)
-class Container extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+
+export default class Container extends Component {
+	static propTypes = {
+		type: PropTypes.string.isRequired
+	};
+
 	moveCard = (dragIndex, hoverIndex) => {
-		const { cards } = { ...this.props };
-		const dragCard = cards[dragIndex];
+		const dragCard = this.props.cards[dragIndex];
 
 		const newState = update(this.props, {
 			cards: {
@@ -48,7 +68,7 @@ class Container extends Component {
 	render() {
 		return (
 			<div className={this.props.type + '-container'}>
-				{this.props.type.toUpperCase()}
+				<span className="name">{this.props.type.toUpperCase()}</span>
 
 				<div className="cards-container">
 					{(this.props.cards || []).map((card, i) => (
@@ -68,24 +88,3 @@ class Container extends Component {
 		)
 	}
 }
-
-const mapStateToProps = (state, ownProps) => {
-	return {
-		cards: state.prosCons[ownProps.type]
-	}
-}
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		reorderCards: (type, cards) => dispatch(actions.prosCons.reorderCards(type, cards)),
-		addCard: (cardType, value) => dispatch(actions.prosCons.addCard(cardType, value)),
-		updateCard: (cardType, id, value) => dispatch(actions.prosCons.editCard(cardType, id, value)),
-		deleteCard: (cardType, id) => dispatch(actions.prosCons.deleteCard(cardType, id))
-	}
-}
-
-Container.propTypes = {
-	type: PropTypes.string.isRequired
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Container);

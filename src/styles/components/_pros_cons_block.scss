@@ -2,9 +2,10 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    height: 700px;
+    height: 100vh;
     flex-direction: row;
     width: 600px;
+    overflow-x: scroll;
 
     .pros-container {
         width: 50%;
@@ -14,6 +15,14 @@
         width: 50%;
     }
 
+    .name {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 0;
+        border-bottom: 1px solid black;
+    }
+
     .line {
         width: 1px;
         height: 100vh;
@@ -21,8 +30,16 @@
         background-color: black;
     }
 
+    .cards-container {
+        margin-top: 20px;
+    }
+
     .card {
         padding: 0.5rem 1rem;
         cursor: move;
+
+        strong {
+            margin-right: 10px;
+        }
     }
 }

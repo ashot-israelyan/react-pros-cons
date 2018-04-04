@@ -49,9 +49,18 @@ const cardTarget = {
 	isDragging: monitor.isDragging(),
 }))
 
-class Card extends Component {
+export default class Card extends Component {
+	static propTypes = {
+		index: PropTypes.number.isRequired,
+		id: PropTypes.any.isRequired,
+		text: PropTypes.string.isRequired,
+		moveCard: PropTypes.func.isRequired,
+		hadleInputSubmit: PropTypes.func.isRequired,
+		addEmptyCard: PropTypes.func.isRequired,
+		removeCard: PropTypes.func.isRequired
+	}
+
 	state = {
-		text: this.props.text,
 		cardAdded: !!this.props.text
 	};
 
@@ -67,11 +76,7 @@ class Card extends Component {
 			return false;
 		}
 
-		this.setState({ text: event.target.value });
-	}
-
-	handleBlur = () => {
-		this.props.hadleInputSubmit(this.state.text, this.props.id);
+		this.props.hadleInputSubmit(event.target.value, this.props.id);
 	}
 
 	render() {
@@ -81,31 +86,23 @@ class Card extends Component {
 			connectDragSource,
 			connectDropTarget,
 		} = this.props
-		const opacity = isDragging ? 0 : 1
+		const opacity = isDragging ? 0 : 1;
 
-		return connectDragSource(
-			connectDropTarget(
-				<div className="card" style={{ opacity }}>
+		const jsx = (
+			<div className="card" style={{ opacity }}>
 					<strong>{index + 1}.</strong>
 					<input
 						type="text"
-						defaultValue={this.state.text}
+						defaultValue={this.props.text}
 						onChange={this.onChangeHandler}
 						onBlur={this.handleBlur} />
 				</div>
-			),
-		)
+		);
+
+		if (!this.props.text) {
+			return jsx;
+		}
+
+		return connectDragSource(connectDropTarget(jsx));
 	}
 }
-
-Card.propTypes = {
-	index: PropTypes.number.isRequired,
-	id: PropTypes.any.isRequired,
-	text: PropTypes.string.isRequired,
-	moveCard: PropTypes.func.isRequired,
-	hadleInputSubmit: PropTypes.func.isRequired,
-	addEmptyCard: PropTypes.func.isRequired,
-	removeCard: PropTypes.func.isRequired
-}
-
-export default Card;

@@ -27,14 +27,6 @@ const initialState = {
         },
         {
             id: uniqueId('cons_'),
-            text: 'It\'s really tasty dfsagdfg'
-        },
-        {
-            id: uniqueId('cons_'),
-            text: 'It\'s really fast hsdhgd'
-        },
-        {
-            id: uniqueId('cons_'),
             text: ''
         }
     ]
@@ -42,7 +34,6 @@ const initialState = {
 
 export default () => {
     return (state = initialState, action) => {
-        let cardIndex = 0;
         switch (action.type) {
             case actionTypes.REORDER_CARDS:
                 return {
@@ -53,10 +44,10 @@ export default () => {
             case actionTypes.EDIT_CARD:
                 const newStateEdits = [ ...state[action.cardType] ];
 
-                cardIndex = newStateEdits.findIndex(el => el.id === action.id);
+                const cardEditIndex = newStateEdits.findIndex(el => el.id === action.id);
 
-                if (cardIndex > -1) {
-                    newStateEdits[cardIndex].text = action.value;
+                if (cardEditIndex > -1) {
+                    newStateEdits[cardEditIndex].text = action.value;
                 }
 
                 return {
@@ -78,10 +69,10 @@ export default () => {
             case actionTypes.DELETE_CARD:
                 const newStateDeletes = [ ...state[action.cardType] ];
                 
-                cardIndex = newStateDeletes.findIndex(el => el.id === action.id);
+                const cardDeleteIndex = newStateDeletes.findIndex(el => el.id === action.id);
 
-                if (cardIndex > -1) {
-                    newStateDeletes.splice(cardIndex, 1);
+                if (cardDeleteIndex > -1) {
+                    newStateDeletes.splice(cardDeleteIndex, 1);
                 }
 
                 return {

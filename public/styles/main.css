@@ -300,6 +300,9 @@ template {
  */
 [hidden] {
   display: none; }
+body {
+  overflow: hidden; }
+
 .app {
   display: flex;
   align-items: center;
@@ -323,20 +326,31 @@ header {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  height: 700px;
+  height: 100vh;
   flex-direction: row;
-  width: 600px; }
+  width: 600px;
+  overflow-x: scroll; }
   .container .pros-container {
     width: 50%; }
   .container .cons-container {
     width: 50%; }
+  .container .name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0;
+    border-bottom: 1px solid black; }
   .container .line {
     width: 1px;
     height: 100vh;
     color: black;
     background-color: black; }
+  .container .cards-container {
+    margin-top: 20px; }
   .container .card {
     padding: 0.5rem 1rem;
     cursor: move; }
+    .container .card strong {
+      margin-right: 10px; }
 
 /*# sourceMappingURL=main.css.map*/
