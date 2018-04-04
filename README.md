@@ -16,7 +16,7 @@ Clone this repository
 $ git clone https://github.com/ashot-israelyan/react-pros-cons.git
 ```
 
-CD to this app
+Go to the app directory
 ```sh
 $ cd react-pros-cons
 ```
